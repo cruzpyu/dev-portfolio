@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Stack {
+  id       Int            @id @default(autoincrement())
+  name     String
+  projects ProjectStack[]
+}
+
+model Project {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  stacks      ProjectStack[] 
+}
+
+model ProjectStack {
+  fk_stack   Int
+  fk_project Int
+  stack      Stack   @relation(fields: [fk_stack], references: [id])
+  project    Project @relation(fields: [fk_project], references: [id])
+
+  @@id([fk_stack, fk_project]) 
+}
